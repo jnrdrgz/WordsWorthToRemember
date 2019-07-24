@@ -1,5 +1,6 @@
 package xyz.juanrodriguez.www.wordsworthtoremember;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,9 @@ public class ListOfWords extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     System.out.println(def);
+                    Intent intent = new Intent(ListOfWords.this, DefinitionActivity.class);
+                    intent.putExtra("ACTUAL_WORD_DEF", def);
+                    startActivity(intent);
                 }});
 
             LinearLayout ll = (LinearLayout)findViewById(R.id.layout_buttons_words);
