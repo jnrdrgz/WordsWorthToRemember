@@ -43,15 +43,16 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(getApplicationContext().getFilesDir().getPath());
         try (FileReader r = new FileReader(getApplicationContext().getFilesDir().getPath() + "words.json")){
             System.out.println("loaded json file");
-            String f = "";
+            StringBuilder f = new StringBuilder();
             int i;
             while((i=r.read()) != -1)
-                f += (char)i;
+                f.append((char)i);
             r.close();
 
             System.out.println(f);
 
-            words = toMap(f);
+            String w = f.toString();
+            words = toMap(w);
 
         } catch (IOException e) {
             System.out.println("error loading json file");
