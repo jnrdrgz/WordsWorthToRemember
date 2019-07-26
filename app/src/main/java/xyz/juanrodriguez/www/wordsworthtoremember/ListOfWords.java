@@ -20,6 +20,7 @@ public class ListOfWords extends AppCompatActivity {
         for (Map.Entry<String, String> entry : words.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
 
+            final String word = entry.getKey();
             final String def = entry.getValue();
             final Button b = new Button(this);
             b.setText(entry.getKey());
@@ -30,6 +31,8 @@ public class ListOfWords extends AppCompatActivity {
                     System.out.println(def);
                     Intent intent = new Intent(ListOfWords.this, DefinitionActivity.class);
                     intent.putExtra("ACTUAL_WORD_DEF", def);
+                    intent.putExtra("ACTUAL_WORD", word);
+
                     startActivity(intent);
                 }});
 

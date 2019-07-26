@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,6 +34,19 @@ public class MainActivity extends AppCompatActivity {
 
     TextView wordTextV;
     TextView defTextV;
+
+    public static void saveWordsInJson(String path){
+        JSONObject words_js_obj = new JSONObject(words);
+
+        try (FileWriter file = new FileWriter(path + "words.json")) {
+
+            file.write(words_js_obj.toString());
+            file.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,18 +97,10 @@ public class MainActivity extends AppCompatActivity {
 
                         words.put(wordTextV.getText().toString(), defTextV.getText().toString());
 
-                        JSONObject words_js_obj = new JSONObject(words);
+                        saveWordsInJson(getApplicationContext().getFilesDir().getPath());
 
-                        System.out.println(getApplicationContext().getFilesDir().getPath());
-
-                        try (FileWriter file = new FileWriter(getApplicationContext().getFilesDir().getPath() + "words.json")) {
-
-                            file.write(words_js_obj.toString());
-                            file.flush();
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        Toast toast = Toast.makeText(getApplicationContext(), "Word Added", Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
