@@ -26,9 +26,11 @@ import org.json.JSONObject;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static java.security.AccessController.getContext;
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView wordTextV;
     TextView defTextV;
-    int MID = 1;
+    static int MID = 1;
     public static void saveWordsInJson(String path){
         JSONObject words_js_obj = new JSONObject(words);
 
@@ -62,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         System.out.println("inittt");
+        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+//        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 30000, pendingIntent);
+        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 60000, pendingIntent);
         System.out.println(getApplicationContext().getFilesDir().getPath());
         try (FileReader r = new FileReader(getApplicationContext().getFilesDir().getPath() + "words.json")){
             System.out.println("loaded json file");
@@ -82,13 +89,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         addListenerButton();
-
-        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
-//        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 30000, pendingIntent);
-        am.set(AlarmManager.RTC_WAKEUP, 30000, pendingIntent);
-
     }
 
     public void addListenerButton(){
@@ -161,10 +161,22 @@ public class MainActivity extends AppCompatActivity {
         return m;
     }
 
-    public class AlarmReceiver extends BroadcastReceiver {
+    public static String getRandomElement()
+    {
+        List<String> list = new ArrayList<String>(words.keySet());
+
+        Random rand = new Random();
+        return list.get(rand.nextInt(list.size()));
+    }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            String w = words.get("gato");
+
+            String randWord = getRandomElement();
+
             long when = System.currentTimeMillis();
             NotificationManager notificationManager = (NotificationManager) context
                     .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -179,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
 
             NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
                     context).setSmallIcon(R.drawable.ic_launcher_background)
-                    .setContentTitle("Alarm Fired")
-                    .setContentText("Events to be Performed").setSound(alarmSound)
+                    .setContentTitle(randWord)
+                    .setContentText(words.get(randWord)).setSound(alarmSound)
                     .setAutoCancel(true).setWhen(when)
                     .setContentIntent(pendingIntent)
                     .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
