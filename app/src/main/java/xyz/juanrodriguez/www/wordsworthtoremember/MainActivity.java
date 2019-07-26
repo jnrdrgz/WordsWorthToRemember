@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -26,11 +27,14 @@ import org.json.JSONObject;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Locale;
 
 import static java.security.AccessController.getContext;
 
@@ -63,13 +67,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        System.out.println("inittt");
+        System.out.println("init");
+        long notTime = 1020000;
         Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
 //        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 30000, pendingIntent);
-        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 60000, pendingIntent);
-        System.out.println(getApplicationContext().getFilesDir().getPath());
+        am.setRepeating(
+                AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+                3600000, pendingIntent
+        );
         try (FileReader r = new FileReader(getApplicationContext().getFilesDir().getPath() + "words.json")){
             System.out.println("loaded json file");
             StringBuilder f = new StringBuilder();
@@ -169,11 +176,16 @@ public class MainActivity extends AppCompatActivity {
         return list.get(rand.nextInt(list.size()));
     }
 
+    public static int createID(){
+        Date now = new Date();
+        int id = Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
+        return id;
+    }
+
     public static class AlarmReceiver extends BroadcastReceiver {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String w = words.get("gato");
 
             String randWord = getRandomElement();
 
@@ -196,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                     .setAutoCancel(true).setWhen(when)
                     .setContentIntent(pendingIntent)
                     .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
-            notificationManager.notify(MID, mNotifyBuilder.build());
+            notificationManager.notify(createID(), mNotifyBuilder.build());
             MID++;
 
             System.out.println("notifier created");
