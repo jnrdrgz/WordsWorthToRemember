@@ -1,8 +1,15 @@
 package xyz.juanrodriguez.www.wordsworthtoremember;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
     Button addButton;
     Button viewButton;
+    Button autoButton;
 
     TextView wordTextV;
     TextView defTextV;
-
+    int MID = 1;
     public static void saveWordsInJson(String path){
         JSONObject words_js_obj = new JSONObject(words);
 
@@ -75,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
 
         addListenerButton();
 
+        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
+//        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 30000, pendingIntent);
+        am.set(AlarmManager.RTC_WAKEUP, 30000, pendingIntent);
+
     }
 
     public void addListenerButton(){
@@ -110,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                 });
                 AlertDialog alert = builder.create();
                 alert.show();
-
             }
         });
 
@@ -120,7 +133,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ListOfWords.class));
+            }
+        });
 
+        autoButton = findViewById(R.id.button_autodef);
+        autoButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Feature not available yet", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
@@ -138,5 +159,36 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return m;
+    }
+
+    public class AlarmReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            long when = System.currentTimeMillis();
+            NotificationManager notificationManager = (NotificationManager) context
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+
+            Intent notificationIntent = new Intent(context, MainActivity.class);
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                    notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+            NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
+                    context).setSmallIcon(R.drawable.ic_launcher_background)
+                    .setContentTitle("Alarm Fired")
+                    .setContentText("Events to be Performed").setSound(alarmSound)
+                    .setAutoCancel(true).setWhen(when)
+                    .setContentIntent(pendingIntent)
+                    .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+            notificationManager.notify(MID, mNotifyBuilder.build());
+            MID++;
+
+            System.out.println("notifier created");
+        }
+
     }
 }

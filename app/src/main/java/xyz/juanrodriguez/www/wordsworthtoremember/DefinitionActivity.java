@@ -43,6 +43,13 @@ public class DefinitionActivity extends AppCompatActivity {
             }});
 
         editButton = findViewById(R.id.button_editDef);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(getApplicationContext(), "You can edit a word by re-uploading it!", Toast.LENGTH_SHORT);
+                toast.show();
+                startActivity(new Intent(DefinitionActivity.this, MainActivity.class));
+            }});
 
     }
 }
