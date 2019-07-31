@@ -1,6 +1,5 @@
 package xyz.juanrodriguez.www.wordsworthtoremember;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -53,9 +52,6 @@ public class MainActivity extends AppCompatActivity {
     TextView wordTextV;
     TextView defTextV;
 
-    Timer timer;
-    //Intent serviceIntent = new Intent(this, ReminderService.class);
-
     public static void saveWordsInJson(String path){
         JSONObject words_js_obj = new JSONObject(words);
 
@@ -69,32 +65,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void startTimer(){
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                notif(getApplicationContext());
-            }
-        };
-        timer = new Timer(true);
-        int delay = 1000*5; //
-        int interval = 60000*20; //60 minutes
-        timer.schedule(task, delay, interval);
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         System.out.println("init");
-        long notTime = 1020000;
-        Intent intent1 = new Intent(MainActivity.this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
-//        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 30000, pendingIntent);
-        //am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3600000, pendingIntent);
 
         try (FileReader r = new FileReader(getApplicationContext().getFilesDir().getPath() + "words.json")){
             System.out.println("loaded json file");
@@ -115,10 +91,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //startTimer();
-
-        Intent serviceIntent = new Intent(this, ReminderService.class);
-        startService(serviceIntent);
-
+        if(!words.isEmpty()) {
+            Intent serviceIntent = new Intent(this, ReminderService.class);
+            startService(serviceIntent);
+        }
         addListenerButton();
     }
 
@@ -140,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
 
-                        words.put(wordTextV.getText().toString(), defTextV.getText().toString());
+                        words.put(wordTextV.getText().toString().replace(","," ").replace(":"," "), defTextV.getText().toString().replace(","," ").replace(":"," "));
 
                         saveWordsInJson(getApplicationContext().getFilesDir().getPath());
 
@@ -171,10 +147,8 @@ public class MainActivity extends AppCompatActivity {
         autoButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast toast = Toast.makeText(getApplicationContext(), "Feature not available yet", Toast.LENGTH_SHORT);
-                //toast.show();
-                //startService(serviceIntent);
-
+                Toast toast = Toast.makeText(getApplicationContext(), "Feature not available yet", Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
@@ -206,63 +180,5 @@ public class MainActivity extends AppCompatActivity {
         Date now = new Date();
         int id = Integer.parseInt(new SimpleDateFormat("ddHHmmss",  Locale.US).format(now));
         return id;
-    }
-
-    public void notif(Context context){
-        long when = System.currentTimeMillis();
-        String randWord = getRandomElement();
-
-        NotificationManager notificationManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-
-        Intent notificationIntent = new Intent(context, MainActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
-                context).setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle(randWord)
-                .setContentText(words.get(randWord)).setSound(alarmSound)
-                .setAutoCancel(true).setWhen(when)
-                .setContentIntent(pendingIntent)
-                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
-        notificationManager.notify(createID(), mNotifyBuilder.build());
-    }
-
-    public static class AlarmReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            String randWord = getRandomElement();
-
-            long when = System.currentTimeMillis();
-            NotificationManager notificationManager = (NotificationManager) context
-                    .getSystemService(Context.NOTIFICATION_SERVICE);
-
-            Intent notificationIntent = new Intent(context, MainActivity.class);
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-                    notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-            NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
-                    context).setSmallIcon(R.drawable.ic_launcher_background)
-                    .setContentTitle(randWord)
-                    .setContentText(words.get(randWord)).setSound(alarmSound)
-                    .setAutoCancel(true).setWhen(when)
-                    .setContentIntent(pendingIntent)
-                    .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
-            notificationManager.notify(createID(), mNotifyBuilder.build());
-
-            System.out.println("notifier created");
-        }
-
     }
 }

@@ -73,7 +73,10 @@ public class ReminderService extends Service {
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Intent notificationIntent = new Intent(context, DefinitionActivity.class);
+        notificationIntent.putExtra("ACTUAL_WORD_DEF", def);
+        notificationIntent.putExtra("ACTUAL_WORD", word);
+
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
@@ -86,8 +89,7 @@ public class ReminderService extends Service {
                 .setContentTitle(randWord)
                 .setContentText(def).setSound(alarmSound)
                 .setAutoCancel(true).setWhen(when)
-                .setContentIntent(pendingIntent)
-                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+                .setContentIntent(pendingIntent);
         notificationManager.notify(id, mNotifyBuilder.build());
 
     }
