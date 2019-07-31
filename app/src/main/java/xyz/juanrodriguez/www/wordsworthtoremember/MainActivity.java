@@ -3,12 +3,14 @@ package xyz.juanrodriguez.www.wordsworthtoremember;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static java.security.AccessController.getContext;
 
@@ -48,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
     TextView wordTextV;
     TextView defTextV;
-    static int MID = 1;
+
+    Timer timer;
+    //Intent serviceIntent = new Intent(this, ReminderService.class);
+
     public static void saveWordsInJson(String path){
         JSONObject words_js_obj = new JSONObject(words);
 
@@ -62,6 +69,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void startTimer(){
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                notif(getApplicationContext());
+            }
+        };
+        timer = new Timer(true);
+        int delay = 1000*5; //
+        int interval = 60000*20; //60 minutes
+        timer.schedule(task, delay, interval);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,10 +94,8 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) MainActivity.this.getSystemService(MainActivity.this.ALARM_SERVICE);
 //        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 30000, pendingIntent);
-        am.setRepeating(
-                AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-                3600000, pendingIntent
-        );
+        //am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 3600000, pendingIntent);
+
         try (FileReader r = new FileReader(getApplicationContext().getFilesDir().getPath() + "words.json")){
             System.out.println("loaded json file");
             StringBuilder f = new StringBuilder();
@@ -94,6 +113,11 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("error loading json file");
             e.printStackTrace();
         }
+
+        //startTimer();
+
+        Intent serviceIntent = new Intent(this, ReminderService.class);
+        startService(serviceIntent);
 
         addListenerButton();
     }
@@ -147,8 +171,10 @@ public class MainActivity extends AppCompatActivity {
         autoButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(getApplicationContext(), "Feature not available yet", Toast.LENGTH_SHORT);
-                toast.show();
+                //Toast toast = Toast.makeText(getApplicationContext(), "Feature not available yet", Toast.LENGTH_SHORT);
+                //toast.show();
+                //startService(serviceIntent);
+
             }
         });
     }
@@ -182,6 +208,31 @@ public class MainActivity extends AppCompatActivity {
         return id;
     }
 
+    public void notif(Context context){
+        long when = System.currentTimeMillis();
+        String randWord = getRandomElement();
+
+        NotificationManager notificationManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
+                context).setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle(randWord)
+                .setContentText(words.get(randWord)).setSound(alarmSound)
+                .setAutoCancel(true).setWhen(when)
+                .setContentIntent(pendingIntent)
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+        notificationManager.notify(createID(), mNotifyBuilder.build());
+    }
+
     public static class AlarmReceiver extends BroadcastReceiver {
 
         @Override
@@ -209,7 +260,6 @@ public class MainActivity extends AppCompatActivity {
                     .setContentIntent(pendingIntent)
                     .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
             notificationManager.notify(createID(), mNotifyBuilder.build());
-            MID++;
 
             System.out.println("notifier created");
         }
