@@ -1,4 +1,4 @@
-package xyz.juanrodriguez.www.wordsworthtoremember;
+package xyz.juanrodriguez.www.wordsworthtoremember3;
 
 import org.junit.Test;
 

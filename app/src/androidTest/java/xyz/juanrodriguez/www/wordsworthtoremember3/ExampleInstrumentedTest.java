@@ -1,4 +1,4 @@
-package xyz.juanrodriguez.www.wordsworthtoremember;
+package xyz.juanrodriguez.www.wordsworthtoremember3;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("xyz.juanrodriguez.www.wordsworthtoremember", appContext.getPackageName());
+        assertEquals("xyz.juanrodriguez.www.wordsworthtoremember3", appContext.getPackageName());
     }
 }
