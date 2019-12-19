@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -50,22 +52,42 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView wordTextView;
-        public TextView definitionTextView;
+
+        TextView wordTextView;
+        TextView definitionTextView;
+        Button editButton;
+        Button deleteButton;
+        LinearLayout wordsLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.wordTextView = itemView.findViewById(R.id.tvWord);
-            this.definitionTextView = itemView.findViewById(R.id.tvDefinition);
+            wordTextView = itemView.findViewById(R.id.tvWord);
+            definitionTextView = itemView.findViewById(R.id.tvDefinition);
+            editButton = itemView.findViewById(R.id.button_edit);
+            deleteButton = itemView.findViewById(R.id.button_delete);
+            wordsLayout = itemView.findViewById(R.id.layout_words);
 
-            
 
-            itemView.setOnClickListener(this);
+            editButton.setOnClickListener(this);
+            deleteButton.setOnClickListener(this);
+            wordsLayout.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) { //mClickListener.onItemClick(view, getAdapterPosition());
+                switch (view.getId()) {
+                    case R.id.button_edit:
+                        mClickListener.onEdit(view, getAdapterPosition());
+                        break;
+                    case R.id.button_delete:
+                        mClickListener.onDelete(view, getAdapterPosition());
+                        break;
+                    case R.id.layout_words:
+                        mClickListener.onTouchWord(view, getAdapterPosition());
+                        break;
+                }
+            }
         }
     }
 
@@ -81,6 +103,10 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        //void onItemClick(View view, int position);
+
+        void onTouchWord(View view, int p);
+        void onEdit(View view,int p);
+        void onDelete(View view, int p);
     }
 }

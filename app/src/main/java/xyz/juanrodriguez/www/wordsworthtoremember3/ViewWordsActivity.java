@@ -51,13 +51,28 @@ public class ViewWordsActivity extends AppCompatActivity implements WordAdapter.
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onTouchWord(View view, int position) {
         //Toast.makeText(this, "You clicked " + adapter.getItem(position).get_word() + " on row number " + position, Toast.LENGTH_SHORT).show();
         if (view.findViewById(R.id.tvDefinition).getVisibility() == View.VISIBLE) {
             view.findViewById(R.id.tvDefinition).setVisibility(View.GONE);
         } else {
             view.findViewById(R.id.tvDefinition).setVisibility(View.VISIBLE);
         }
+    }
+    @Override
+    public void onEdit(View view, int position) {
+        //Word w = adapter.getItem(position);
+        //dbcon.deleteWord(w);
+    }
+
+    @Override
+    public void onDelete(View view, int position) {
+        Word w = adapter.getItem(position);
+        dbcon.deleteWord(w);
+        finish();
+        startActivity(getIntent());
+        Toast.makeText(ViewWordsActivity.this, "Record Deleted", Toast.LENGTH_SHORT).show();
+
     }
 
 }
