@@ -1,5 +1,6 @@
 package xyz.juanrodriguez.www.wordsworthtoremember3;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,8 +62,11 @@ public class ViewWordsActivity extends AppCompatActivity implements WordAdapter.
     }
     @Override
     public void onEdit(View view, int position) {
-        //Word w = adapter.getItem(position);
-        //dbcon.deleteWord(w);
+        Word w = adapter.getItem(position);
+        Intent editWordIntent = new Intent(this, EditWordActivity.class);
+        System.out.println(w.get_id());
+        editWordIntent.putExtra("WORD_ID", Integer.toString(w.get_id()));
+        startActivity(editWordIntent);
     }
 
     @Override

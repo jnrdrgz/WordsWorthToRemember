@@ -39,8 +39,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
             holder.definitionTextView.setText(word.get_definition());
             holder.definitionTextView.setVisibility(View.GONE);
         }
-
-
     }
 
     // total number of rows
@@ -48,7 +46,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     public int getItemCount() {
         return mData.size();
     }
-
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -66,7 +63,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
             editButton = itemView.findViewById(R.id.button_edit);
             deleteButton = itemView.findViewById(R.id.button_delete);
             wordsLayout = itemView.findViewById(R.id.layout_words);
-
 
             editButton.setOnClickListener(this);
             deleteButton.setOnClickListener(this);
