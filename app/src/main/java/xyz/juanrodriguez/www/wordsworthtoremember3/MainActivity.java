@@ -1,6 +1,8 @@
 package xyz.juanrodriguez.www.wordsworthtoremember3;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     // URL Consts
     private String URL = "http://158.69.206.233:81/";
     private String LANG = "es";
+    private int SELECTED_ITEM = 0;
 
     // UI
     private TextView word_box;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     //DB
     private DBController dbcon;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 word_box.setText("Word");
                 def_box.setText("Definition");
+
             }
         });
     }
@@ -106,7 +112,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Word", "Json: " + response.toString());
                 try{
                     JSONArray definitions = response.getJSONArray("definitions");
-                    def_box.setText(definitions.getString(0));
+                    if(definitions.length() != 1){
+                        a(definitions);
+
+                    } else {
+                        def_box.setText(definitions.getString(0));
+                    }
                 } catch (Exception e){
                     Log.e("Word", e.toString());
                 }
@@ -120,5 +131,38 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Request Failed", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void a(JSONArray defs){
+        final String[] list = new String[defs.length()];
+        final String[] list_complete_defs = new String[defs.length()];
+        for (int i=0; i<defs.length(); i++) {
+            try {
+                String s = defs.getString(i);
+                if(s.length() > 30){
+                    s = s.substring(0, 29);
+                }
+                list[i] =  s;
+                list_complete_defs[i] = defs.getString(i);
+            }  catch (JSONException e) {
+                System.out.println("e");
+            }
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("What definition you want?");
+        builder.setSingleChoiceItems(list, 0,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        SELECTED_ITEM = whichButton;
+                    }
+                });
+        builder.setPositiveButton(android.R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        System.out.println(whichButton);
+                        def_box.setText(list_complete_defs[SELECTED_ITEM]);
+                    }
+                });
+        builder.create().show();
     }
 }
