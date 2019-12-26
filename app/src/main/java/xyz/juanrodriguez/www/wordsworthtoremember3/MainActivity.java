@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String s = defs.getString(i);
                 if(s.length() > 30){
-                    s = s.substring(0, 29);
+                    s = s.substring(0, 39) + "...";
                 }
                 list[i] =  s;
                 list_complete_defs[i] = defs.getString(i);
