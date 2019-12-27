@@ -1,5 +1,7 @@
 package xyz.juanrodriguez.www.wordsworthtoremember3;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -39,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     //DB
     private DBController dbcon;
 
+    //Notification Service
+    Intent mServiceIntennt;
+    private NotificationService mNotificationService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,13 @@ public class MainActivity extends AppCompatActivity {
 
         //db
         dbcon = new DBController(this);
+
+        mNotificationService = new NotificationService();
+        mServiceIntennt = new Intent(this, mNotificationService.getClass());
+        if (!isMyServiceRunning(mNotificationService.getClass())) {
+            startService(mServiceIntennt);
+            Log.i("NOTIFSERVICE", "SERVICE STARTED");
+        }
 
         b_auto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+
     }
 
     private void requestWord(String word){
@@ -113,8 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     JSONArray definitions = response.getJSONArray("definitions");
                     if(definitions.length() != 1){
-                        a(definitions);
-
+                        select_definition(definitions);
                     } else {
                         def_box.setText(definitions.getString(0));
                     }
@@ -133,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void a(JSONArray defs){
+    private void select_definition(JSONArray defs){
         final String[] list = new String[defs.length()];
         final String[] list_complete_defs = new String[defs.length()];
         for (int i=0; i<defs.length(); i++) {
@@ -164,5 +179,23 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         builder.create().show();
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("Service status", "Running");
+                return true;
+            }
+        }
+        Log.i ("Service status", "Not running");
+        return false;
+    }
+
+    @Override
+    protected void onDestroy(){
+        stopService(mServiceIntennt);
+        super.onDestroy();
     }
 }
