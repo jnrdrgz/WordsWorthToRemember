@@ -2,6 +2,7 @@ package xyz.juanrodriguez.www.wordsworthtoremember3;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -94,9 +95,13 @@ public class NotificationService extends Service {
         List<Word> allWords = dbcon.getAllWords();
         Word word = allWords.get(rand.nextInt(allWords.size()-1));
 
-        //Intent notificationIntent = new Intent(context, DefinitionActivity.class);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
-        //  notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent notificationIntent = new Intent(context, WordFromNotificationActivity.class);
+        notificationIntent.putExtra("WORD", word.get_word());
+        notificationIntent.putExtra("WORD_DEF", word.get_definition());
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+          notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -104,8 +109,8 @@ public class NotificationService extends Service {
                 context).setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle(word.get_word())
                 .setContentText(word.get_definition()).setSound(alarmSound)
-                .setAutoCancel(true).setWhen(when);
-        //.setContentIntent(pendingIntent);
+                .setAutoCancel(true).setWhen(when)
+        .setContentIntent(pendingIntent);
         notificationManager.notify(id, mNotifyBuilder.build());
         Log.i("NOTIFSERVICE", "NOTIFICATION SENDED");
     }
