@@ -27,8 +27,8 @@ public class EditWordActivity extends AppCompatActivity {
         //db
         dbcon = new DBController(this);
 
-        def_box = findViewById(R.id.box_definition);
-        word_box = findViewById(R.id.box_word);
+        def_box = findViewById(R.id.box_word);
+        word_box = findViewById(R.id.box_definition);
         save_button = findViewById(R.id.button_save);
 
         List<Word> wordList = dbcon.getAllWords();

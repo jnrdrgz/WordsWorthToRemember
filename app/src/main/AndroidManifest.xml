@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WordFromNotificationActivity"></activity>
+        <activity android:name=".NewWordActivity"></activity>
+        <activity android:name=".WordFromNotificationActivity" />
 
         <receiver
             android:name=".RestarterBroadcast"
@@ -33,7 +34,7 @@
 
         <service
             android:name=".NotificationService"
-            android:enabled="true"></service>
+            android:enabled="true" />
 
         <activity android:name=".ViewWordsActivity" />
         <activity android:name=".EditWordActivity" />

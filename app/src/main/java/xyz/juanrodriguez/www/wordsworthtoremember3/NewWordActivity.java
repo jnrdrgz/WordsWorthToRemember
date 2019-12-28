@@ -1,9 +1,6 @@
 package xyz.juanrodriguez.www.wordsworthtoremember3;
 
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -23,8 +21,8 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MainActivity extends AppCompatActivity {
-    // URL Consts
+public class NewWordActivity extends AppCompatActivity {
+
     private String URL = "http://158.69.206.233:81/";
     private String LANG = "es";
     private int SELECTED_ITEM = 0;
@@ -34,25 +32,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView def_box;
     private Button b_auto;
     private Button add_button;
-    private Button viewwordsButton;
     private Button clear_button;
     private Switch lang_switch;
 
     //DB
     private DBController dbcon;
 
-    //Notification Service
-    Intent mServiceIntennt;
-    private NotificationService mNotificationService;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_new_word);
 
-        def_box = findViewById(R.id.box_word);
-        word_box = findViewById(R.id.box_definition);
+        def_box = findViewById(R.id.box_definition);
+        word_box = findViewById(R.id.box_word);
         b_auto = findViewById(R.id.button_auto);
         lang_switch = findViewById(R.id.lang_switch);
         add_button = findViewById(R.id.button_add);
@@ -60,13 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         //db
         dbcon = new DBController(this);
-
-        mNotificationService = new NotificationService();
-        mServiceIntennt = new Intent(this, mNotificationService.getClass());
-        if (!isMyServiceRunning(mNotificationService.getClass())) {
-            startService(mServiceIntennt);
-            Log.i("NOTIFSERVICE", "SERVICE STARTED");
-        }
 
         b_auto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,15 +73,12 @@ public class MainActivity extends AppCompatActivity {
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, NewWordActivity.class));
-            }
-        });
+                String word_ = word_box.getText().toString();
+                String def = def_box.getText().toString();
+                Word word = new Word(word_,def);
 
-        viewwordsButton = findViewById(R.id.button_viewwords);
-        viewwordsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ViewWordsActivity.class));
+                dbcon.addWord(word);
+                Toast.makeText(NewWordActivity.this, "Word Added", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -107,9 +89,6 @@ public class MainActivity extends AppCompatActivity {
                 def_box.setText("Definition");
             }
         });
-
-
-
     }
 
     private void requestWord(String word){
@@ -137,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("WORD", "request fail! status code:"+response);
                 Log.d("WORD", "Fail response: " + response);
                 Log.e("ERROR", e.toString());
-                Toast.makeText(MainActivity.this, "Request Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewWordActivity.this, "Request Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -173,23 +152,5 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         builder.create().show();
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("Service status", "Running");
-                return true;
-            }
-        }
-        Log.i ("Service status", "Not running");
-        return false;
-    }
-
-    @Override
-    protected void onDestroy(){
-        stopService(mServiceIntennt);
-        super.onDestroy();
     }
 }

@@ -39,7 +39,6 @@ public class NotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId){
         super.onStartCommand(intent, flags, startId);
         startTimer();
-        Log.i("NOTIFSERVICE", "TIMER STARTED");
         return START_STICKY;
     }
 
@@ -61,10 +60,8 @@ public class NotificationService extends Service {
         timerTask = new TimerTask() {
             public void run() {
                 sendNotification(getApplicationContext());
-                Log.i("NOTIFSERVICE", "TIMER TASK");
             }
         };
-        Log.i("NOTIFSERVICE", "RUNNING ");
 
         int minutes = 60;
         timer.schedule(timerTask, 0,minutes*60*1000);
@@ -112,6 +109,5 @@ public class NotificationService extends Service {
                 .setAutoCancel(true).setWhen(when)
         .setContentIntent(pendingIntent);
         notificationManager.notify(id, mNotifyBuilder.build());
-        Log.i("NOTIFSERVICE", "NOTIFICATION SENDED");
     }
 }

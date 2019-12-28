@@ -8,115 +8,94 @@
     tools:layout_editor_absoluteY="81dp">
 
     <EditText
-        android:id="@+id/box_word"
-        android:layout_width="338dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="17dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="17dp"
+        android:id="@+id/box_definition"
+        android:layout_width="350dp"
+        android:layout_height="43dp"
         android:ems="10"
         android:inputType="text"
         android:text="Word"
-        app:layout_constraintBottom_toTopOf="@+id/box_definition"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/box_definition"
+        android:id="@+id/box_word"
         android:layout_width="339dp"
-        android:layout_height="118dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="74dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="50dp"
+        android:layout_height="83dp"
         android:ems="10"
         android:inputType="text"
         android:text="Definition"
-        app:layout_constraintBottom_toTopOf="@+id/button_add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/box_definition" />
 
     <Button
         android:id="@+id/button_auto"
-        android:layout_width="156dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="17dp"
-        android:layout_marginEnd="29dp"
+        android:layout_width="149dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
         android:text="Auto"
-        app:layout_constraintBottom_toTopOf="@+id/button_viewwords"
-        app:layout_constraintEnd_toStartOf="@+id/button_add"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lang_switch" />
 
     <Button
         android:id="@+id/button_add"
-        android:layout_width="151dp"
-        android:layout_height="51dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="223dp"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="28dp"
         android:text="Add"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_auto"
-        app:layout_constraintTop_toBottomOf="@+id/button_clear"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/button_clear" />
 
     <Button
         android:id="@+id/button_viewwords"
-        android:layout_width="159dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="172dp"
+        android:layout_width="145dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
         android:text="View Words"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_settings"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_auto" />
 
     <Button
         android:id="@+id/button_settings"
-        android:layout_width="157dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginBottom="169dp"
+        android:layout_width="154dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
         android:text="Settings"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_viewwords"
-        app:layout_constraintTop_toBottomOf="@+id/button_clear" />
+        app:layout_constraintTop_toBottomOf="@+id/button_add" />
 
     <Switch
         android:id="@+id/lang_switch"
-        android:layout_width="64dp"
-        android:layout_height="38dp"
+        android:layout_width="69dp"
+        android:layout_height="56dp"
         android:layout_marginStart="28dp"
-        android:layout_marginEnd="199dp"
-        android:layout_marginBottom="11dp"
+        android:layout_marginTop="20dp"
         android:checked="false"
         android:showText="true"
         android:splitTrack="false"
         android:textOff="ES"
         android:textOn="EN"
-        app:layout_constraintBottom_toTopOf="@+id/button_auto"
-        app:layout_constraintEnd_toStartOf="@+id/button_clear"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/box_definition"
+        app:layout_constraintTop_toBottomOf="@+id/box_word"
         tools:checked="false" />
 
     <Button
         android:id="@+id/button_clear"
-        android:layout_width="97dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="183dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="64dp"
+        android:layout_width="69dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="36dp"
         android:text="Clear"
-        app:layout_constraintBottom_toTopOf="@+id/button_settings"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/lang_switch"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/box_word" />
 
 </android.support.constraint.ConstraintLayout>

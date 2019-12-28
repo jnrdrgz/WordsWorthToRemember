@@ -7,7 +7,7 @@
     tools:context=".EditWordActivity">
 
     <EditText
-        android:id="@+id/box_word"
+        android:id="@+id/box_definition"
         android:layout_width="338dp"
         android:layout_height="39dp"
         android:ems="10"
@@ -17,7 +17,7 @@
         tools:layout_editor_absoluteY="34dp" />
 
     <EditText
-        android:id="@+id/box_definition"
+        android:id="@+id/box_word"
         android:layout_width="339dp"
         android:layout_height="131dp"
         android:layout_marginStart="16dp"
@@ -41,5 +41,5 @@
         android:text="Save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/box_definition" />
+        app:layout_constraintTop_toBottomOf="@+id/box_word" />
 </android.support.constraint.ConstraintLayout>
