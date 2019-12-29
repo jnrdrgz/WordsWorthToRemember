@@ -8,13 +8,10 @@
 
     <TextView
         android:id="@+id/textView_definition"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="29dp"
-        android:layout_marginEnd="29dp"
-        android:layout_marginBottom="52dp"
+        android:layout_width="351dp"
+        android:layout_height="511dp"
+        android:layout_marginTop="16dp"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_word" />
@@ -23,13 +20,12 @@
         android:id="@+id/textView_word"
         android:layout_width="334dp"
         android:layout_height="33dp"
-        android:layout_marginStart="4dp"
         android:layout_marginTop="33dp"
-        android:layout_marginEnd="4dp"
         android:layout_marginBottom="23dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/textView_definition"
-        app:layout_constraintEnd_toEndOf="@+id/textView_definition"
-        app:layout_constraintStart_toStartOf="@+id/textView_definition"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.389"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

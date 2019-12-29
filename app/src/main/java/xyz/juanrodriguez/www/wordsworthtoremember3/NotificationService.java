@@ -64,8 +64,7 @@ public class NotificationService extends Service {
         };
 
         int minutes = 60;
-        timer.schedule(timerTask, 0,minutes*60*1000);
-
+        timer.schedule(timerTask, minutes*60*1000,minutes*60*1000);
     }
 
     public void stopTimerTask(){
