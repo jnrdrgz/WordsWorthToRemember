@@ -74,6 +74,9 @@ public class NewWordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String word_ = word_box.getText().toString();
+
+                word_ = word_.substring(0, 1).toUpperCase() + word_.substring(1);
+
                 String def = def_box.getText().toString();
                 Word word = new Word(word_,def);
 

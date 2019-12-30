@@ -4,28 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WordFromNotificationActivity">
+    tools:context=".WordFromNotificationActivity"
+    android:background="@color/colorBackground">
 
     <TextView
         android:id="@+id/textView_definition"
-        android:layout_width="351dp"
-        android:layout_height="511dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="364dp"
+        android:layout_height="519dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/colorBackgroundSecondary"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_word" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_word"
+        android:fontFamily="@font/work_sans"/>
 
     <TextView
         android:id="@+id/textView_word"
-        android:layout_width="334dp"
-        android:layout_height="33dp"
+        android:layout_width="371dp"
+        android:layout_height="41dp"
         android:layout_marginTop="33dp"
         android:layout_marginBottom="23dp"
+        android:background="@color/colorBackgroundSecondary"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/textView_definition"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.389"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/work_sans"/>
 </android.support.constraint.ConstraintLayout>

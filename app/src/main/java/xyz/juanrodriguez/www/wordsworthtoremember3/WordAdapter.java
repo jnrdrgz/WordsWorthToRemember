@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static android.support.v7.widget.helper.ItemTouchHelper.Callback.makeMovementFlags;
+
 public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     private List<Word> mData;
@@ -60,12 +62,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
             super(itemView);
             wordTextView = itemView.findViewById(R.id.tvWord);
             definitionTextView = itemView.findViewById(R.id.tvDefinition);
-            editButton = itemView.findViewById(R.id.button_edit);
-            deleteButton = itemView.findViewById(R.id.button_delete);
-            wordsLayout = itemView.findViewById(R.id.layout_words);
+            wordsLayout = itemView.findViewById(R.id.rowFG);
 
-            editButton.setOnClickListener(this);
-            deleteButton.setOnClickListener(this);
             wordsLayout.setOnClickListener(this);
         }
 
@@ -73,18 +71,13 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
         public void onClick(View view) {
             if (mClickListener != null) { //mClickListener.onItemClick(view, getAdapterPosition());
                 switch (view.getId()) {
-                    case R.id.button_edit:
-                        mClickListener.onEdit(view, getAdapterPosition());
-                        break;
-                    case R.id.button_delete:
-                        mClickListener.onDelete(view, getAdapterPosition());
-                        break;
-                    case R.id.layout_words:
+                    case R.id.rowFG:
                         mClickListener.onTouchWord(view, getAdapterPosition());
                         break;
                 }
             }
         }
+
     }
 
     // convenience method for getting data at click position
@@ -102,7 +95,5 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
         //void onItemClick(View view, int position);
 
         void onTouchWord(View view, int p);
-        void onEdit(View view,int p);
-        void onDelete(View view, int p);
     }
 }
