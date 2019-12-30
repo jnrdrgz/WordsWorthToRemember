@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="@color/colorBackgroundSecondary">
 
 
     <LinearLayout
@@ -14,6 +15,7 @@
 
         <TextView
             android:id="@+id/tvWord"
+            android:fontFamily="@font/work_sans"
             android:layout_width="84dp"
             android:layout_height="30dp"
             android:layout_weight="1"
@@ -21,6 +23,7 @@
 
         <TextView
             android:id="@+id/tvDefinition"
+            android:fontFamily="@font/work_sans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
