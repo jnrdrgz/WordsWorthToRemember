@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class NewWordActivity extends AppCompatActivity {
     private Button add_button;
     private Button clear_button;
     private Switch lang_switch;
+    private ProgressBar request_progress_bar;
 
     //DB
     private DBController dbcon;
@@ -49,6 +51,7 @@ public class NewWordActivity extends AppCompatActivity {
         lang_switch = findViewById(R.id.lang_switch);
         add_button = findViewById(R.id.button_add);
         clear_button = findViewById(R.id.button_clear);
+        request_progress_bar = findViewById(R.id.progressBarWordRequest);
 
         //db
         dbcon = new DBController(this);
@@ -98,6 +101,8 @@ public class NewWordActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
 
         String url = URL + LANG + "/" + word;
+        request_progress_bar.setVisibility(View.VISIBLE);
+
         client.get(url, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response){
@@ -112,6 +117,8 @@ public class NewWordActivity extends AppCompatActivity {
                 } catch (Exception e){
                     Log.e("Word", e.toString());
                 }
+
+                request_progress_bar.setVisibility(View.INVISIBLE);
             }
 
             @Override
@@ -120,6 +127,7 @@ public class NewWordActivity extends AppCompatActivity {
                 Log.d("WORD", "Fail response: " + response);
                 Log.e("ERROR", e.toString());
                 Toast.makeText(NewWordActivity.this, "Request Failed", Toast.LENGTH_SHORT).show();
+                request_progress_bar.setVisibility(View.INVISIBLE);
             }
         });
     }
