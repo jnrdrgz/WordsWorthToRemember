@@ -39,43 +39,42 @@
 
     <Switch
         android:id="@+id/lang_switch"
-        android:layout_width="66dp"
-        android:layout_height="41dp"
+        android:layout_width="41dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:checked="false"
         android:showText="true"
         android:splitTrack="false"
         android:textOff="ES"
         android:textOn="EN"
-        app:layout_constraintEnd_toStartOf="@+id/button_auto"
-        app:layout_constraintHorizontal_bias="0.448"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/box_definition"
         tools:checked="false" />
 
     <Button
-        android:background="@drawable/button_shape"
-        android:fontFamily="@font/work_sans"
         android:id="@+id/button_clear"
         android:layout_width="100dp"
         android:layout_height="45dp"
         android:layout_marginTop="24dp"
+        android:background="@drawable/button_shape"
+        android:fontFamily="@font/work_sans"
         android:text="Clear"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.358"
+        app:layout_constraintHorizontal_bias="0.362"
         app:layout_constraintStart_toEndOf="@+id/button_auto"
         app:layout_constraintTop_toBottomOf="@+id/box_definition" />
 
     <Button
         android:id="@+id/button_auto"
-        android:fontFamily="@font/work_sans"
         android:layout_width="100dp"
         android:layout_height="45dp"
-        android:layout_marginStart="144dp"
+        android:layout_marginStart="76dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/button_shape"
+        android:fontFamily="@font/work_sans"
         android:text="Auto"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/lang_switch"
         app:layout_constraintTop_toBottomOf="@+id/box_definition" />
 
     <Button

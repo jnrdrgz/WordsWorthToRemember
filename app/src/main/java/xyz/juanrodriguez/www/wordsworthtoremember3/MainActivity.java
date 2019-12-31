@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     // UI
     private Button add_button;
     private Button viewwordsButton;
+    private Button settingsButton;
 
     //DB
     private DBController dbcon;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         //ui
         viewwordsButton = findViewById(R.id.button_viewwords);
         add_button = findViewById(R.id.button_add);
+        settingsButton = findViewById(R.id.button_settings);
         //db
         dbcon = new DBController(this);
 
@@ -57,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ViewWordsActivity.class));
+            }
+        });
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
     }
