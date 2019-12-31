@@ -130,7 +130,7 @@ public class NewWordActivity extends AppCompatActivity {
         for (int i=0; i<defs.length(); i++) {
             try {
                 String s = defs.getString(i);
-                if(s.length() > 30){
+                if(s.length() > 39){
                     s = s.substring(0, 39) + "...";
                 }
                 list[i] =  s;
