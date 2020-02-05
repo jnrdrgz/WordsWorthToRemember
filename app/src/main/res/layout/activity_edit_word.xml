@@ -42,11 +42,11 @@
         android:id="@+id/button_save"
         android:layout_width="93dp"
         android:layout_height="46dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="36dp"
+        android:background="@drawable/button_shape"
+        android:fontFamily="@font/work_sans"
         android:text="Save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/box_word"
-        android:background="@drawable/button_shape"
-        android:fontFamily="@font/work_sans"/>
+        app:layout_constraintTop_toBottomOf="@+id/box_word" />
 </android.support.constraint.ConstraintLayout>
